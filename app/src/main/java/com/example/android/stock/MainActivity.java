@@ -10,11 +10,8 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-
 import java.util.ArrayList;
 
-import static android.R.attr.format;
-import static android.media.CamcorderProfile.get;
 
 public class MainActivity extends AppCompatActivity implements onDownloadCompleteListener, onCompleteListener {
 
@@ -27,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements onDownloadComplet
     ArrayList<SearchStock> getSymbol;
     ArrayList<String> searchName;
     ArrayList<String> searchSymbol;
+    String symbolQuery = "";
 
 
     @Override
@@ -123,14 +121,16 @@ public class MainActivity extends AppCompatActivity implements onDownloadComplet
         }
         AlertDialog.Builder buildAgain = new AlertDialog.Builder(this);
         buildAgain.setTitle("Select");
+
         final ArrayAdapter<String> displayResult = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, searchName);
         displayResult.notifyDataSetChanged();
         buildAgain.setAdapter(displayResult, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
-                String symbol = searchSymbol.get(i);
+
+                symbolQuery += "%2C%22" + searchSymbol.get(i) + "%22";
                 String urlString = "https://query.yahooapis.com/v1/public/yql?q=select+%2A+from+" +
-                        "yahoo.finance.quotes+where+symbol+in+%28%22YHOO%22%2C%22AAPL%22%2C%22GOOG%22%2C%22MSFT%22%2C%22" + symbol + "%22"
+                        "yahoo.finance.quotes+where+symbol+in+%28%22YHOO%22%2C%22AAPL%22%2C%22GOOG%22%2C%22MSFT%22" + symbolQuery
                         + "%29&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&callback";
                 fetchStock(urlString);
                 dialogInterface.dismiss();
