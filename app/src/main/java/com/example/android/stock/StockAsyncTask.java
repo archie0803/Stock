@@ -21,14 +21,15 @@ import java.util.Scanner;
 public class StockAsyncTask extends AsyncTask<String, Void, ArrayList<Stock>> {
 
     onDownloadCompleteListener mListener;
-    void setOnDownloadCompleteListener(onDownloadCompleteListener listener){
+
+    void setOnDownloadCompleteListener(onDownloadCompleteListener listener) {
         this.mListener = listener;
     }
 
     @Override
     protected ArrayList<Stock> doInBackground(String... strings) {
         String urlString = strings[0];
-        try{
+        try {
             URL url = new URL(urlString);
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("GET");
@@ -37,7 +38,7 @@ public class StockAsyncTask extends AsyncTask<String, Void, ArrayList<Stock>> {
 
             Scanner scan = new Scanner(inputStream);
             String str = "";
-            while (scan.hasNext()){
+            while (scan.hasNext()) {
                 str += scan.nextLine();
             }
 
@@ -53,14 +54,13 @@ public class StockAsyncTask extends AsyncTask<String, Void, ArrayList<Stock>> {
     }
 
     private ArrayList<Stock> parseStock(String str) {
-        try{
+        try {
             JSONObject stocksJSON = new JSONObject(str);
-            JSONObject object = stocksJSON.getJSONObject("object");
-            JSONObject query = object.getJSONObject("query");
+            JSONObject query = stocksJSON.getJSONObject("query");
             JSONObject result = query.getJSONObject("results");
             JSONArray quote = result.getJSONArray("quote");
             ArrayList<Stock> stockList = new ArrayList<>();
-            for (int i = 0; i<quote.length(); i++) {
+            for (int i = 0; i < quote.length(); i++) {
                 JSONObject stockJSON = (JSONObject) quote.get(i);
                 String symbol = stockJSON.getString("symbol");
                 String changePercentage = stockJSON.getString("Change_PercentChange");
@@ -86,5 +86,5 @@ public class StockAsyncTask extends AsyncTask<String, Void, ArrayList<Stock>> {
 }
 
 interface onDownloadCompleteListener {
-        void onDownloadComplete(ArrayList<Stock> stockList);
+    void onDownloadComplete(ArrayList<Stock> stockList);
 }

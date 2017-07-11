@@ -3,6 +3,7 @@ package com.example.android.stock;
 import android.content.Context;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.NonNull;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -27,7 +28,7 @@ public class StockAdapter extends ArrayAdapter<Stock> {
     }
 
     @Override
-    public int getCount(){
+    public int getCount() {
         return stockArrayList.size();
     }
 
@@ -43,10 +44,11 @@ public class StockAdapter extends ArrayAdapter<Stock> {
 
     @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent){
-        if(convertView == null) {
-            TextView symbol = (TextView) convertView.findViewById(R.id.stock_symbol);
-            TextView percentageChange = (TextView) convertView.findViewById(R.id.stock_percent_change);
+    public View getView(int position, View convertView, ViewGroup parent) {
+        if (convertView == null) {
+            convertView = LayoutInflater.from(context).inflate(R.layout.stock_list_view, null);
+            TextView symbol = convertView.findViewById(R.id.stock_symbol);
+            TextView percentageChange = convertView.findViewById(R.id.stock_percent_change);
             StockViewHolder stockViewHolder = new StockViewHolder(symbol, percentageChange);
             convertView.setTag(stockViewHolder);
         }
